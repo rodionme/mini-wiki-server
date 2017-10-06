@@ -12,6 +12,22 @@ db.on('open', function () {
       throw Error(err);
     }
 
+    new Article({ title: 'article', content: '1' }).save();
+    new Article({ title: 'article', content: '2' }).save();
+    new Article({ title: 'article', content: '3' }).save();
+    new Article({ title: 'article', content: '4' }).save();
+    new Article({ title: 'article', content: '5' }).save();
+    new Article({ title: 'article', content: '6' }).save();
+    new Article({ title: 'article', content: '7' }).save();
+    new Article({ title: 'article', content: '8' }).save();
+    new Article({ title: 'article', content: '9' }).save();
+    new Article({ title: 'article', content: '10' }).save();
+    new Article({ title: 'article', content: '11' }).save();
+    new Article({ title: 'article', content: '12' }).save();
+    new Article({ title: 'article', content: '13' }).save();
+    new Article({ title: 'article', content: '14' }).save();
+    new Article({ title: 'article', content: '15' }).save();
+
     var article = new Article({
       title: 'Днепр (город)',
       content: '\

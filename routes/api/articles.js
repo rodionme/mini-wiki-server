@@ -22,7 +22,6 @@ router.param('article', function (req, res, next, slug) {
 router.get('/', function (req, res, next) {
   var query = {};
   var limit = 20;
-  var random = 1;
 
   if (typeof req.query.limit !== 'undefined') {
     limit = req.query.limit;
@@ -30,24 +29,18 @@ router.get('/', function (req, res, next) {
 
   // TODO: Add logic for search query
 
-  // TODO: Add logic for random article
   if (typeof req.query.random !== 'undefined') {
-    random = req.query.random;
+    return Article.count().exec(function (err, count) {
+      var random = Math.floor(Math.random() * count);
 
-    return Promise.all([
-      Article.find(query)
-        .limit(Number(random))
-        .sort({ createdAt: 'desc' })
-        .exec()
-    ]).then(function (results) {
-      var articles = results[0];
-
-      return res.json({
-        article: articles.map(function (article) {
-          return article.toJSON();
-        })[0]
-      });
-    }).catch(next);
+      Article.findOne()
+        .skip(random)
+        .exec(function (err, article) {
+          return res.json({
+            article: article
+          });
+        });
+    });
   }
 
   Promise.all([
