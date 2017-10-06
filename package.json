@@ -1,0 +1,29 @@
+{
+  "name": "mini-wiki-server",
+  "version": "1.0.0",
+  "description": "Mini Wikipedia",
+  "author": "Rodion Mescheryakov <msrodion@gmail.com>",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "1.15.0",
+    "cors": "2.7.1",
+    "errorhandler": "1.4.3",
+    "express": "4.13.4",
+    "method-override": "2.3.5",
+    "methods": "1.1.2",
+    "mongoose": "^4.12.0",
+    "mongoose-unique-validator": "1.0.2",
+    "morgan": "1.7.0",
+    "request": "2.69.0",
+    "slug": "0.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
