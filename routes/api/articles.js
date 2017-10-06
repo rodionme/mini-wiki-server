@@ -27,7 +27,20 @@ router.get('/', function (req, res, next) {
     limit = req.query.limit;
   }
 
-  // TODO: Add logic for search query
+  if (typeof req.query.search !== 'undefined') {
+    return Article.where('title', new RegExp(req.query.search, 'i'))
+      .then(function (articles) {
+        if (!articles) {
+          return res.sendStatus(404);
+        }
+
+        return res.json({
+          articles: articles.map(function (article) {
+            return article.toJSON();
+          })
+        });
+      }).catch(next);
+  }
 
   if (typeof req.query.random !== 'undefined') {
     return Article.count().exec(function (err, count) {
