@@ -5,7 +5,8 @@ var slug = require('slug');
 var ArticleSchema = new mongoose.Schema({
   slug: { type: String, lowercase: true, unique: true },
   title: String,
-  content: String
+  content: String,
+  category: { type: mongoose.Schema.Types.String, ref: 'Category' }
 });
 
 ArticleSchema.plugin(uniqueValidator, { message: 'is already taken' });
@@ -27,7 +28,8 @@ ArticleSchema.methods.toJSON = function () {
     id: this._id,
     slug: this.slug,
     title: this.title,
-    content: this.content
+    content: this.content,
+    category: this.category
   };
 };
 
