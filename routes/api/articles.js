@@ -1,13 +1,13 @@
-var router = require('express').Router();
-var mongoose = require('mongoose');
-var Article = mongoose.model('Article');
-var Category = mongoose.model('Category');
+let router = require('express').Router();
+let mongoose = require('mongoose');
+let Article = mongoose.model('Article');
+let Category = mongoose.model('Category');
 
 
 // Preload article objects on routes with ':article'
-router.param('article', function (req, res, next, slug) {
+router.param('article', (req, res, next, slug) => {
   Article.findOne({ slug: slug })
-    .then(function (article) {
+    .then(article => {
       if (!article) {
         return res.sendStatus(404);
       }
@@ -20,9 +20,9 @@ router.param('article', function (req, res, next, slug) {
 
 
 // Get articles
-router.get('/', function (req, res, next) {
-  var query = {};
-  var limit = 20;
+router.get('/', (req, res, next) => {
+  let query = {};
+  let limit = 20;
 
   if (typeof req.query.limit !== 'undefined') {
     limit = req.query.limit;
@@ -30,30 +30,26 @@ router.get('/', function (req, res, next) {
 
   if (typeof req.query.query !== 'undefined') {
     return Article.where('title', new RegExp(req.query.query, 'i'))
-      .then(function (articles) {
+      .then(articles => {
         if (!articles) {
           return res.sendStatus(404);
         }
 
         return res.json({
-          articles: articles.map(function (article) {
-            return article.toJSON();
-          })
+          articles: articles.map(article => article.toJSON())
         });
       }).catch(next);
   }
 
   if (typeof req.query.random !== 'undefined') {
-    return Article.count().exec(function (err, count) {
-      var random = Math.floor(Math.random() * count);
+    return Article.count().exec((err, count) => {
+      let random = Math.floor(Math.random() * count);
 
       Article.findOne()
         .skip(random)
-        .exec(function (err, article) {
-          return res.json({
-            article: article
-          });
-        });
+        .exec((err, article) => res.json({
+          article: article
+        }));
     });
   }
 
@@ -64,31 +60,27 @@ router.get('/', function (req, res, next) {
       .exec(),
     Article.count(query).exec()
   ]).then(function (results) {
-    var articles = results[0];
-    var articlesCount = results[1];
+    let articles = results[0];
+    let articlesCount = results[1];
 
     return res.json({
-      articles: articles.map(function (article) {
-        return article.toJSON();
-      }),
-      articlesCount: articlesCount
+      articles: articles.map(article => article.toJSON()),
+      articlesCount
     });
   }).catch(next);
 });
 
 // Get article
-router.get('/:article', function (req, res, next) {
-  return res.json({
-    article: req.article.toJSON()
-  });
-});
+router.get('/:article', (req, res, next) => res.json({
+  article: req.article.toJSON()
+}));
 
 // Create article
-router.post('/', function (req, res, next) {
-  var article = new Article(req.body.article);
+router.post('/', (req, res, next) => {
+  let article = new Article(req.body.article);
 
   Category.findOne({ slug: req.body.article.category })
-    .then(function (category) {
+    .then(category => {
       if (!category) {
         return res.sendStatus(404);
       }
@@ -99,19 +91,14 @@ router.post('/', function (req, res, next) {
 
       category.articles.push(article);
 
-      category.save(function () {
-        article.save()
-          .then(function () {
-            return res.json({
-              article: article
-            });
-          }).catch(next);
+      category.save(() => {
+        article.save().then(() => res.json({ article })).catch(next);
       });
     }).catch(next);
 });
 
 // Update article
-router.put('/:article', function (req, res, next) {
+router.put('/:article', (req, res, next) => {
   if (typeof req.body.article.title !== 'undefined') {
     req.article.title = req.body.article.title;
   }
@@ -121,9 +108,10 @@ router.put('/:article', function (req, res, next) {
   }
 
   if (typeof req.body.article.category !== 'undefined') {
+    // Add article to category
     if (req.body.article.category.length) {
       Category.findOne({ slug: req.body.article.category })
-        .then(function (category) {
+        .then(category => {
           if (!category) {
             return res.sendStatus(404);
           }
@@ -138,17 +126,15 @@ router.put('/:article', function (req, res, next) {
         }).catch(next);
     }
 
+    // Remove article from category
     if (req.article.category && req.article.category.length) {
       Category.findOne({ slug: req.article.category })
-        .then(function (category) {
+        .then(category => {
           if (!category) {
             return res.sendStatus(404);
           }
 
-          category.articles = category.articles.filter(function (article) {
-            return article.slug !== req.body.article.slug
-          });
-
+          category.articles = category.articles.filter(article => article.slug !== req.body.article.slug);
           category.save();
         }).catch(next);
     }
@@ -156,11 +142,7 @@ router.put('/:article', function (req, res, next) {
     req.article.category = req.body.article.category;
   }
 
-  req.article.save().then(function (article) {
-    return res.json({
-      article: article
-    });
-  }).catch(next);
+  req.article.save().then(article => res.json({ article })).catch(next);
 });
 
 module.exports = router;

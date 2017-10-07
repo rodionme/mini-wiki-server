@@ -1,12 +1,12 @@
-var router = require('express').Router();
-var mongoose = require('mongoose');
-var Category = mongoose.model('Category');
+let router = require('express').Router();
+let mongoose = require('mongoose');
+let Category = mongoose.model('Category');
 
 
 // Preload category objects on routes with ':category'
-router.param('category', function (req, res, next, slug) {
+router.param('category', (req, res, next, slug) => {
   Category.findOne({ slug: slug })
-    .then(function (category) {
+    .then(category => {
       if (!category) {
         return res.sendStatus(404);
       }
@@ -19,9 +19,9 @@ router.param('category', function (req, res, next, slug) {
 
 
 // Get categories
-router.get('/', function (req, res, next) {
-  var query = {};
-  var limit = 20;
+router.get('/', (req, res, next) => {
+  let query = {};
+  let limit = 20;
 
   if (typeof req.query.limit !== 'undefined') {
     limit = req.query.limit;
@@ -33,24 +33,20 @@ router.get('/', function (req, res, next) {
       .sort({ createdAt: 'desc' })
       .exec(),
     Category.count(query).exec()
-  ]).then(function (results) {
-    var categories = results[0];
-    var categoriesCount = results[1];
+  ]).then(results => {
+    let categories = results[0];
+    let categoriesCount = results[1];
 
     return res.json({
-      categories: categories.map(function (category) {
-        return category.toJSON();
-      }),
-      categoriesCount: categoriesCount
+      categories: categories.map(category => category.toJSON()),
+      categoriesCount
     });
   }).catch(next);
 });
 
 // Get category
-router.get('/:category', function (req, res, next) {
-  return res.json({
-    category: req.category.toJSON()
-  });
-});
+router.get('/:category', (req, res, next) => res.json({
+  category: req.category.toJSON()
+}));
 
 module.exports = router;

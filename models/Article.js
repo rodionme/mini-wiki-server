@@ -1,12 +1,12 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
-var slug = require('slug');
+let mongoose = require('mongoose');
+let uniqueValidator = require('mongoose-unique-validator');
+let slug = require('slug');
 
-var ArticleSchema = new mongoose.Schema({
+let ArticleSchema = new mongoose.Schema({
   slug: { type: String, lowercase: true, unique: true },
   title: String,
   content: String,
-  category: { type: mongoose.Schema.Types.String, ref: 'Category' }
+  category: { type: mongoose.Schema.Types.Stringlet, ref: 'Category' }
 });
 
 ArticleSchema.plugin(uniqueValidator, { message: 'is already taken' });

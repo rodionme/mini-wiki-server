@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
-var slug = require('slug');
+let mongoose = require('mongoose');
+let uniqueValidator = require('mongoose-unique-validator');
+let slug = require('slug');
 
-var CategorySchema = new mongoose.Schema({
+let CategorySchema = new mongoose.Schema({
   slug: { type: String, lowercase: true, unique: true },
   title: String,
   articles: [{ type: mongoose.Schema.Types.Mixed, ref: 'Article' }]
@@ -27,14 +27,12 @@ CategorySchema.methods.toJSON = function () {
     id: this._id,
     slug: this.slug,
     title: this.title,
-    articles: this.articles.map(function (article) {
-      return {
-        id: article._id,
-        slug: article.slug,
-        title: article.title,
-        content: article.content
-      };
-    }) || []
+    articles: this.articles.map(article => ({
+      id: article._id,
+      slug: article.slug,
+      title: article.title,
+      content: article.content
+    })) || []
   };
 };
 

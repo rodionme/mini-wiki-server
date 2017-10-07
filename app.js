@@ -1,13 +1,13 @@
-var express = require('express'),
-  bodyParser = require('body-parser'),
-  cors = require('cors'),
-  errorhandler = require('errorhandler'),
-  mongoose = require('mongoose');
+let express = require('express');
+let bodyParser = require('body-parser');
+let cors = require('cors');
+let errorhandler = require('errorhandler');
+let mongoose = require('mongoose');
 
-var isProduction = process.env.NODE_ENV === 'production';
+let isProduction = process.env.NODE_ENV === 'production';
 
 // Create global app object
-var app = express();
+let app = express();
 
 app.use(cors());
 
@@ -36,8 +36,8 @@ require('./models/Article');
 app.use(require('./routes'));
 
 /// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
+app.use((req, res, next) => {
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -47,7 +47,7 @@ app.use(function (req, res, next) {
 // development error handler
 // will print stacktrace
 if (!isProduction) {
-  app.use(function (err, req, res, next) {
+  app.use((err, req, res, next) => {
     console.log(err.stack);
 
     res.status(err.status || 500);
@@ -63,7 +63,7 @@ if (!isProduction) {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({
     'errors': {
@@ -74,7 +74,7 @@ app.use(function (err, req, res, next) {
 });
 
 // finally, let's start our server...
-var server = app.listen(process.env.PORT || 3000, function () {
+let server = app.listen(process.env.PORT || 3000, () => {
   console.log('Listening on port ' + server.address().port);
 });
 
