@@ -1,6 +1,8 @@
 Mini Wiki (server part)
 =====================
 
+### Node.js, Express, Mongoose
+
 # Getting started
 
 To get the Node server running locally:
