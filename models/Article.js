@@ -6,7 +6,7 @@ let ArticleSchema = new mongoose.Schema({
   slug: { type: String, lowercase: true, unique: true },
   title: String,
   content: String,
-  category: { type: mongoose.Schema.Types.Stringlet, ref: 'Category' }
+  category: { type: mongoose.Schema.Types.String, ref: 'Category' }
 });
 
 ArticleSchema.plugin(uniqueValidator, { message: 'is already taken' });
